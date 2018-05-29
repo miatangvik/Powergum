@@ -5,9 +5,10 @@
 body {
     margin: 0;
     font-family: 'Barlow Condensed', sans-serif;
+    overflow: hidden;
 }
 
-h1{
+h1 {
     margin: 0;
     padding: 0;
     color: white;
@@ -19,7 +20,7 @@ h1{
     font-style: italic;
 }
 
-p{
+p {
     margin: 0;
     padding: 0;
     color: white;
@@ -27,7 +28,7 @@ p{
     font-weight: 300;
 }
 
-.main-wrapper{
+.main-wrapper {
     width: 100%;
     height: 100vh;
     padding: 50px;
@@ -38,11 +39,9 @@ p{
     background-image: linear-gradient(148deg, #071d3b 0%, #240303 100%);
 }
 
-
-.gum-content 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.gum-content display: flex;
+justify-content: center;
+align-items: center;
 }
 
 .gum-container {
@@ -51,21 +50,22 @@ p{
     margin: 20px;
 }
 
-.gum-container-foreground, .gum-container-background{
+.gum-container-foreground,
+.gum-container-background {
     position: absolute;
-    width: 375px;
-    height: 375px;
+    width: 750px;
+    height: 750px;
     border-radius: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-.gum-container-background{
-    box-shadow: inset 0px 0px 100px rgba(6, 1, 36, 0.15);   
+.gum-container-background {
+    box-shadow: inset 0px 0px 100px rgba(6, 1, 36, 0.15);
 }
 
-.gum-container-foreground{
+.gum-container-foreground {
     background-image: url(img/container-foreground.png);
     opacity: .5;
     z-index: 2;
