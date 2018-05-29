@@ -21,6 +21,9 @@ let vp2decY = y => vp.y + (y - canvas.height / 2) / vp.dsc;
 let getDist = (ax, ay, bx, by, m, d) => (m = 50, d = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2))) < m ? m : d;
 let getMid = (a, b) => (a + b) / 2;
 
+let balls = [];
+let walls = [];
+
 var numberOfBalls = 70;
 var ballColor = '#80ff00';
 var ballStroke = '#133c96';
@@ -30,8 +33,6 @@ const prec = 0.01;
 const kdf = 0.85;
 const grav = 0.01;
 
-let balls = [];
-let walls = [];
 let mox = xres / 2;
 let moy = xres;
 
@@ -39,6 +40,7 @@ let getdistdxdy = (dx, dy) => Math.sqrt(dx * dx + dy * dy);
 
 function geta0(dx, dy) {
     let d = getdistdxdy(dx, dy);
+    
     if (d !== 0) {
         let res = Math.acos(dx / d);
         if (dy < 0) res = -res;
@@ -48,6 +50,7 @@ function geta0(dx, dy) {
 
 function geta(x1, y1, x2, y2) {
     let d = Math.sqrt((x1 * x1 + y1 * y1) * (x2 * x2 + y2 * y2));
+    
     if (d !== 0) {
         let res = Math.acos((x1 * x2 + y1 * y2) / d);
         if ((x1 * y2 - x2 * y1) < 0) res = -res;
@@ -64,6 +67,7 @@ function gettimeb2b(b1, b2) {
     let kk = a0 * b0 + c0 * u0;
     let kc = a0 * a0 + c0 * c0 - Math.pow(b1.r + b2.r, 2);
     let kd = kk * kk - ka * kc;
+    
     if (kd > 0 && ka !== 0) {
         kd = Math.sqrt(kd);
         let res = (-kk + kd) / ka;
@@ -80,6 +84,7 @@ function gettimeb2w(b, w) {
     let kc = lx * b.dy - ly * b.dx;
     let kk = getdistdxdy(lx, ly) * b.r;
     let ka = -w.x1 * w.y2 + w.x2 * w.y1 + ly * b.x - lx * b.y;
+    
     if (kc !== 0) {
         let res = (ka + kk) / kc;
         let t = (ka - kk) / kc;
@@ -100,6 +105,7 @@ function gravity(ball) {
     ball.dx += (mox - ball.x) * grav;
     ball.dy += (moy - ball.y) * grav;
     ball.vel = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+    
     if (ball.vel !== 0) {
         ball.ang = Math.acos(ball.dx / ball.vel);
         if (ball.dy < 0) ball.ang = -ball.ang;
@@ -126,6 +132,7 @@ function createWorld() {
     let i = 0;
     let xx = 1;
     let yy = 1;
+    
     while (i < numberOfBalls) {
         balls[i] = new Ball(xres / 2 + yy * 13 - (xx + 1) / 2 * 13, 180 - xx * 12, 0, 0, 6);
         yy++;
@@ -145,10 +152,11 @@ function createWorld() {
     }
 }
 
-function animateit() {
+function animateIt() {
     let checkt = (tt, dtt, mtt) => (tt >= 0) && (tt < dtt) && (tt < mtt);
     let dt = 1;
     for (let b of balls) getdxdy(b);
+    
     do {
         let mint = dt;
         let tob = -1,
@@ -164,6 +172,7 @@ function animateit() {
                     mint = tt;
                 }
             }
+            
             for (let z = i + 1; z < numberOfBalls; z++) {
                 let tt = gettimeb2b(balls[i], balls[z]);
                 if (checkt(tt, dt, mint)) {
@@ -181,11 +190,13 @@ function animateit() {
                     balls[frb].x = balls[frb].x + mint * balls[frb].dx;
                     balls[frb].y = balls[frb].y + mint * balls[frb].dy;
                     let an = geta0(walls[tow].x2 - walls[tow].x1, walls[tow].y2 - walls[tow].y1);
+                    
                     if (geta(balls[frb].x - walls[tow].x1, balls[frb].y - walls[tow].y1, walls[tow].x2 - walls[tow].x1, walls[tow].y2 - walls[tow].y1) < 0) {
                         an -= Math.PI / 2;
                     } else {
                         an += Math.PI / 2;
                     }
+                    
                     balls[frb].ang = geta0(-balls[frb].vel * Math.cos(balls[frb].ang - an), balls[frb].vel * Math.sin(balls[frb].ang - an)) + an;
                     balls[frb].vel *= kdf;
                     getdxdy(balls[frb]);
@@ -221,7 +232,6 @@ function animateit() {
 }
 
 window.addEventListener('load', function () {
-
     createWorld();
     canvas = document.querySelector('#blue-gum');
     ctx = canvas.getContext('2d');
@@ -236,10 +246,11 @@ window.addEventListener('load', function () {
     setTimeout(draw, 500);
 });
 
+// Remove ball when button is pressed
 socket.on('buttonPressed', function (buttonPressed) {
     var bottomBallYPos = 0;
     var bottomBallIndex = 0;
-    
+
     if (buttonPressed) {
         for (var i = 0; i < balls.length; i++) {
             if (balls[i].y > bottomBallYPos) {
@@ -253,6 +264,7 @@ socket.on('buttonPressed', function (buttonPressed) {
     }
 });
 
+// Remove ball when space key is pressed
 window.addEventListener('keydown', function (e) {
     var keyCode = e.keyCode;
     var bottomBallYPos = 0;
@@ -276,23 +288,27 @@ window.addEventListener('keydown', function (e) {
 function draw() {
     var gumImage = document.createElement('img');
     gumImage.src = '/img/blue-gum.png';
-
+    
     for (i = 0; i < numberOfBalls; i++) gravity(balls[i]);
-    animateit();
+    animateIt();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     for (var i = 0; i < numberOfWalls; i++) {
         ctx.beginPath();
         ctx.moveTo(dec2vpX(walls[i].x1), dec2vpY(walls[i].y1));
         ctx.lineTo(dec2vpX(walls[i].x2), dec2vpY(walls[i].y2));
         ctx.closePath();
     }
+
     for (var i = 0; i < numberOfBalls; i++) {
         ctx.beginPath();
         ctx.arc(dec2vpX(balls[i].x), dec2vpY(balls[i].y), vp.dsc * balls[i].r, 0, 2 * Math.PI, false);
-        ctx.fillStyle = ballColor;
+        ctx.drawImage = gumImage;
+        /*ctx.fillStyle = ballColor;
         ctx.fill();
         ctx.strokeStyle = ballStroke;
-        ctx.stroke();
+        ctx.stroke();*/
     }
+
     setTimeout(draw, 20);
 }
