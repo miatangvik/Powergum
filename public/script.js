@@ -22,8 +22,8 @@ let getDist = (ax, ay, bx, by, m, d) => (m = 50, d = Math.sqrt(Math.pow(bx - ax,
 let getMid = (a, b) => (a + b) / 2;
 
 var numberOfBalls = 70;
-var ballColor = '#80ff00';
-var ballStroke = '#133c96';
+var ballColor = '#e3002c';
+var ballStroke = '#152900';
 const numberOfWalls = 30;
 
 const prec = 0.01;
