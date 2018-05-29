@@ -1,6 +1,8 @@
 // Get button press
 var socket = io.connect('http://localhost:3000');
 
+var emptyMsg = document.querySelector('.out-of-gum');
+
 const xres = 500;
 const yres = 500;
 let canvas;
@@ -271,6 +273,10 @@ function removeBall() {
 
     balls.splice(bottomBallIndex, 1);
     numberOfBalls--;
+    
+    if (numberOfBalls <= 0) {
+        emptyMsg.classList.remove('hidden');
+    }
 }
 
 function draw() {

@@ -3,29 +3,9 @@
 }
 
 body {
+    overflow: hidden;
     margin: 0;
     font-family: 'Barlow Condensed', sans-serif;
-    overflow: hidden;
-}
-
-h1 {
-    margin: 0;
-    padding: 0;
-    color: white;
-    margin-bottom: 75px;
-    font-size: 72px;
-    letter-spacing: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-style: italic;
-}
-
-p {
-    margin: 0;
-    padding: 0;
-    color: white;
-    font-size: 32px;
-    font-weight: 300;
 }
 
 .main-wrapper {
@@ -67,9 +47,24 @@ p {
 }
 
 .gum-container-foreground {
+    z-index: 2;
     background-image: url(img/container-foreground.png);
     opacity: .5;
-    z-index: 2;
     box-shadow: -25px 25px 150px rgba(0, 0, 0, 0.7);
     border: 5px solid rgba(0, 0, 0, 0.27);
+}
+
+
+/* POPUP */
+
+.out-of-gum {
+    position: absolute;
+    z-index: 5;
+    color: white;
+    text-transform: uppercase;
+    font-size: 32px;
+}
+
+.hidden {
+    display: none;
 }
