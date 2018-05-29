@@ -39,9 +39,10 @@ p {
     background-image: linear-gradient(148deg, #071d3b 0%, #240303 100%);
 }
 
-.gum-content display: flex;
-justify-content: center;
-align-items: center;
+.gum-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gum-container {
