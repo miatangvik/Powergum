@@ -4,7 +4,7 @@ School project made for our graduation exhibition.
 
 ## Installing
 
-Run
+Open the Powergum master folder in Terminal, then run
 
 ```
 npm install
@@ -12,19 +12,19 @@ npm install
 
 to install dependencies.
 
-Secondly run
+Then run
 
 ```
 npm start
 ```
+to start the server.
 
 Go to
 
 ```
 localhost:3000
 ```
-
-and Powergum should be good to go!
+in your browser of choice and Powergum should be good to go!
 
 ## Optional
 
