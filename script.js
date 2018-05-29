@@ -222,8 +222,8 @@ window.addEventListener('load', function () {
     canvas = document.querySelector('#blue-gum');
     ctx = canvas.getContext('2d');
     var resize = e => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = xres * 1.5;
+        canvas.height = yres * 1.5;
         vp.dsc = Math.min(canvas.width / vp.w, canvas.height / vp.h);
     }
     resize();
@@ -236,6 +236,9 @@ window.addEventListener('keydown', function (e) {
     var bottomBallIndex = 0;
     
     if (keyCode === 32) {
+        
+        e.preventDefault();
+        
         for (var i = 0; i < balls.length; i++) {
             if (balls[i].y > bottomBallYPos) {
                 bottomBallYPos = balls[i].y;
@@ -256,7 +259,6 @@ function draw() {
         ctx.beginPath();
         ctx.moveTo(dec2vpX(walls[i].x1), dec2vpY(walls[i].y1));
         ctx.lineTo(dec2vpX(walls[i].x2), dec2vpY(walls[i].y2));
-        ctx.stroke();
         ctx.closePath();
     }
     for (var i = 0; i < numberOfBalls; i++) {
