@@ -25,8 +25,8 @@ let balls = [];
 let walls = [];
 
 var numberOfBalls = 70;
-var ballColor = '#80ff00';
-var ballStroke = '#133c96';
+var ballColor = '#e3002c';
+var ballStroke = '#152900';
 const numberOfWalls = 30;
 
 const prec = 0.01;
