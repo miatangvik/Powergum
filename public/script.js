@@ -1,11 +1,6 @@
 // Get button press
 var socket = io.connect('http://localhost:3000');
 
-socket.on('buttonPressed', function(buttonPressed) {
-    console.log(buttonPressed);
-});
-
-
 const xres = 250;
 const yres = 250;
 let canvas;
@@ -26,8 +21,9 @@ let vp2decY = y => vp.y + (y - canvas.height / 2) / vp.dsc;
 let getDist = (ax, ay, bx, by, m, d) => (m = 50, d = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2))) < m ? m : d;
 let getMid = (a, b) => (a + b) / 2;
 
-var numberOfBalls = 60;
-var ballColor = '#ff0000';
+var numberOfBalls = 70;
+var ballColor = '#80ff00';
+var ballStroke = '#133c96';
 const numberOfWalls = 30;
 
 const prec = 0.01;
@@ -110,13 +106,12 @@ function gravity(ball) {
     }
 }
 
-function Ball(x, y, vel, ang, r, color) {
+function Ball(x, y, vel, ang, r) {
     this.x = x;
     this.y = y;
     this.vel = vel;
     this.ang = ang;
     this.r = r;
-    this.color = color;
     this.m = r * r;
 }
 
@@ -132,7 +127,7 @@ function createWorld() {
     let xx = 1;
     let yy = 1;
     while (i < numberOfBalls) {
-        balls[i] = new Ball(xres / 2 + yy * 13 - (xx + 1) / 2 * 13, 160 - xx * 12, 0, 0, 6, ballColor);
+        balls[i] = new Ball(xres / 2 + yy * 13 - (xx + 1) / 2 * 13, 180 - xx * 12, 0, 0, 6);
         yy++;
         if (yy > xx) {
             xx++;
@@ -227,18 +222,35 @@ function animateit() {
 
 window.addEventListener('load', function () {
 
-        createWorld();
-        canvas = document.querySelector('#blue-gum');
-        ctx = canvas.getContext('2d');
+    createWorld();
+    canvas = document.querySelector('#blue-gum');
+    ctx = canvas.getContext('2d');
 
-        var resize = e => {
-            canvas.width = xres * 1.5;
-            canvas.height = yres * 1.5;
-            vp.dsc = Math.min(canvas.width / vp.w, canvas.height / vp.h);
+    var resize = e => {
+        canvas.width = xres * 1.5;
+        canvas.height = yres * 1.5;
+        vp.dsc = Math.min(canvas.width / vp.w, canvas.height / vp.h);
+    }
+
+    resize();
+    setTimeout(draw, 500);
+});
+
+socket.on('buttonPressed', function (buttonPressed) {
+    var bottomBallYPos = 0;
+    var bottomBallIndex = 0;
+    
+    if (buttonPressed) {
+        for (var i = 0; i < balls.length; i++) {
+            if (balls[i].y > bottomBallYPos) {
+                bottomBallYPos = balls[i].y;
+                bottomBallIndex = i;
+            }
         }
 
-        resize();
-        setTimeout(draw, 500);
+        balls.splice(bottomBallIndex, 1);
+        numberOfBalls--;
+    }
 });
 
 window.addEventListener('keydown', function (e) {
@@ -262,6 +274,9 @@ window.addEventListener('keydown', function (e) {
 });
 
 function draw() {
+    var gumImage = document.createElement('img');
+    gumImage.src = '/img/blue-gum.png';
+
     for (i = 0; i < numberOfBalls; i++) gravity(balls[i]);
     animateit();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -269,14 +284,14 @@ function draw() {
         ctx.beginPath();
         ctx.moveTo(dec2vpX(walls[i].x1), dec2vpY(walls[i].y1));
         ctx.lineTo(dec2vpX(walls[i].x2), dec2vpY(walls[i].y2));
-        ctx.stroke();
         ctx.closePath();
     }
     for (var i = 0; i < numberOfBalls; i++) {
         ctx.beginPath();
         ctx.arc(dec2vpX(balls[i].x), dec2vpY(balls[i].y), vp.dsc * balls[i].r, 0, 2 * Math.PI, false);
-        ctx.fillStyle = balls[i].color;
+        ctx.fillStyle = ballColor;
         ctx.fill();
+        ctx.strokeStyle = ballStroke;
         ctx.stroke();
     }
     setTimeout(draw, 20);
