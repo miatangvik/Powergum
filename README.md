@@ -2,6 +2,11 @@
 
 School project made for our graduation exhibition.
 
+## Prerequisites
+
+You need to have npm installed on your computer.
+If you don't have it, you can install it [here](https://www.npmjs.com/get-npm).
+
 ## Installing
 
 Open the Powergum master folder in Terminal, then run
@@ -12,7 +17,7 @@ npm install
 
 to install dependencies.
 
-Then run
+Secondly run
 
 ```
 npm start
