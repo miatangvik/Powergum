@@ -33,4 +33,8 @@ in your browser of choice and Powergum should be good to go!
 
 ## Optional
 
-If you have an Arduino board, it is possible to use a button connected with your board to "eject" a gum. You need to have StandardFirmataPlus installed on your board.
+If you have an Arduino board, it is possible to "eject" a gum by using a button connected to your board on digital pin 2.
+
+### Prerequisites
+
+You need to have StandardFirmataPlus installed on your board.
